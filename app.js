@@ -8,7 +8,7 @@ let db = require('./models/database');
 
 async function createDB() {
     await db.sequelize
-        .sync({ alter: true, force: false })
+        .sync({ alter: true, force: true })
         .then(() => {
             return Promise.resolve();
         })
@@ -27,7 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', indexRouter);
-//app.use('/users', usersRouter);
+let {
+    usersRouter
+} = require("./routes/");
 
+app.use('/users', usersRouter);
 module.exports = app;

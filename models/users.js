@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: ''
         },
         password: {
-            type: DataTypes.STRING(51),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         uuid: {
