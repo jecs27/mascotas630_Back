@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             allowNull: false,
         },
-        password: {
-            type: DataTypes.STRING(51),
-            allowNull: false,
-        },
         email: {
             type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: ''
+        },
+        password: {
+            type: DataTypes.STRING(51),
+            allowNull: false,
         },
         uuid: {
             type: DataTypes.UUID,
