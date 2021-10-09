@@ -19,17 +19,19 @@ const registerPet = async(req, res) => {
     }
     const tran = await sequelize.transaction();
     try {
-        let { name, breed, birthday } = req.body;
+        let { name, breed, birthday, user_id } = req.body;
         let [regPet, created] = await pets.findOrCreate({
             where: {
                 name: name,
                 breed: breed,
-                birthday: birthday
+                birthday: birthday,
+                user_id: user_id
             },
             defaults: {
                 name: name,
                 breed: breed,
-                birthday: birthday
+                birthday: birthday,
+                user_id: user_id
             },
             raw: true,
             transaction: tran
@@ -108,6 +110,7 @@ const listMyPets = async(req, res) => {
         });
     }
 }
+
 module.exports = {
     registerPet,
     listMyPets,

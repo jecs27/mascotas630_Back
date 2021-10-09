@@ -3,7 +3,12 @@ const moment = require("moment");
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class pets extends Model {
-        static associate(models) {}
+        static associate(models) {
+            pets.belongsTo(models.users, {
+                as: 'users',
+                foreignKey: 'user_id'
+            });
+        }
     }
     pets.init({
         create_date: {
