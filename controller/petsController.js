@@ -39,6 +39,7 @@ const registerPet = async(req, res) => {
         if (created) {
             delete regPet.dataValues.create_date;
             delete regPet.dataValues.status;
+
             if (req.files.length > 0) {
 
                 var listImg = [];
@@ -192,8 +193,55 @@ const updatePet = async(req, res) => {
         });
     }
 }
+
+const deletePet = async(req, res) => {
+    const tran = await sequelize.transaction();
+    try {
+        let pet_uuid = req.params.id;
+
+        let petData = await pets.findOne({
+            where: {
+                uuid: pet_uuid,
+                status: 1
+            },
+            raw: true,
+            transaction: tran
+        });
+        if (petData) {
+
+            let deleted = await pets.destroy({
+                where: {
+                    uuid: pet_uuid,
+                    status: 1
+                },
+                raw: true,
+                transaction: tran
+            });
+            if (deleted == 1) {
+                await tran.commit();
+                return res.status(200).send({ status: 200, message: "The pet was deleted", data: {} });
+            } else {
+                await tran.rollback();
+                return res.status(400).send({ status: 400, message: "An error was generated when trying to delete Pet data", data: { regPet } });
+            }
+        } else {
+            await tran.rollback();
+            return res.status(404).send({ status: 404, message: "The pet does not Exist.", data: {} });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            status: 500,
+            message: 'An error was generated when trying to delete Pet.',
+            data: { error: error.toString() }
+        });
+    }
+}
+
+
 module.exports = {
     registerPet,
     listMyPets,
-    updatePet
+    updatePet,
+    deletePet
 }

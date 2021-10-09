@@ -4,7 +4,12 @@ var router = express.Router();
 const multer = require('multer');
 const path = require('path');
 
-const { registerPet, listMyPets, updatePet } = require('../controller/petsController');
+const {
+    registerPet,
+    listMyPets,
+    updatePet,
+    deletePet
+} = require('../controller/petsController');
 const { verifyToken } = require('../middleware/Auth/Auth');
 
 var storage = multer.diskStorage({
@@ -29,6 +34,7 @@ const upload = multer({
 
 router.post('/registerPet', upload.array('image'), registerPet);
 router.get('/listMyPets', listMyPets);
-router.patch('/updatePet', updatePet)
+router.patch('/updatePet', updatePet);
+router.delete('/deletePet/:id', deletePet)
 
 module.exports = router;
