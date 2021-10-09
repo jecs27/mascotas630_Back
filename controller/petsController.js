@@ -99,9 +99,23 @@ const listMyPets = async(req, res) => {
             data: {}
         });
     }
+    const tran = await sequelize.transaction();
+
+    //falta agregar filtros de 12 mascotas
     try {
-        return res.status(201).send({ status: 201, message: "Pet was created successfully.", data: { pet: regPet, images: regImages } });
+        let petListData = await pets.findAll({
+            raw: true,
+            transaction: tran
+        });
+
+        await tran.commit();
+        return res.status(200).send({
+            status: 200,
+            message: "Pet was created successfully.",
+            data: { petListData }
+        });
     } catch (error) {
+        await tran.rollback();
         console.log(error);
         return res.status(500).send({
             status: 500,
@@ -111,7 +125,75 @@ const listMyPets = async(req, res) => {
     }
 }
 
+const updatePet = async(req, res) => {
+    let err = await errResponse(validationResult(req), res, 'error');
+    if (err !== null) {
+        return res.status(422).send({
+            status: 422,
+            message: messageValidation,
+            data: {}
+        });
+    }
+
+    const tran = await sequelize.transaction();
+    try {
+        let {
+            pet_uuid,
+            name,
+            breed,
+            birthday,
+        } = req.body;
+
+        let petData = await pets.findOne({
+            where: {
+                uuid: pet_uuid
+            },
+            raw: true,
+            transaction: tran
+        });
+        if (petData) {
+            let change = {
+                name: name,
+                breed: breed,
+                birthday: birthday,
+            }
+
+            let [updated, regPet] = await pets.update(change, {
+                returning: true,
+                where: {
+                    uuid: pet_uuid
+                },
+                transaction: tran
+            });
+
+            if (updated == 1) {
+                delete regPet[0].dataValues.create_date;
+                delete regPet[0].dataValues.user_id;
+                delete regPet[0].dataValues.status;
+
+
+                await tran.commit();
+                return res.status(200).send({ status: 200, message: "Update success", data: { pet: regPet[0] } });
+            } else {
+                await tran.rollback();
+                return res.status(400).send({ status: 400, message: "An error was generated when trying to update Pet data", data: { regPet } });
+            }
+        } else {
+            await tran.rollback();
+            return res.status(404).send({ status: 404, message: "The pet does not Exist.", data: {} });
+        }
+    } catch (error) {
+        await tran.rollback();
+        console.log(error);
+        return res.status(500).send({
+            status: 500,
+            message: 'An error was generated when trying to update Pet data.',
+            data: { error: error.toString() }
+        });
+    }
+}
 module.exports = {
     registerPet,
     listMyPets,
+    updatePet
 }

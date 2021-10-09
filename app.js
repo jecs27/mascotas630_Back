@@ -8,7 +8,7 @@ let db = require('./models/database');
 
 async function createDB() {
     await db.sequelize
-        .sync({ alter: true, force: true })
+        .sync({ alter: true, force: false })
         .then(() => {
             return Promise.resolve();
         })

@@ -37,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: moment().format('YYYY-MM-DD'),
         },
+        uuid: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            defaultValue: DataTypes.UUIDV4,
+        },
         status: {
             type: DataTypes.INTEGER,
             allowNull: false,
