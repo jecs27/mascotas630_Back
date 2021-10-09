@@ -27,8 +27,7 @@ const upload = multer({
     }
 });
 
-router.post('/registerPet', registerPet);
-router.post('/uploadImagesPet', upload.array('image'), uploadImagesPet);
+router.post('/registerPet', upload.array('image'), registerPet);
 //router.post('/listMyPets', listMyPets);
 
 module.exports = router;
