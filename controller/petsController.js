@@ -51,6 +51,22 @@ const registerPet = async(req, res) => {
     }
 }
 
+const uploadImagesPet = async(req, res) => {
+    try {
+        if (req.files.length > 0) {
+            for (let image of req.files) {
+                console.log(image);
+            }
+        }
+        return res.status(200).send({ status: 200, message: 'Done.', data: { error: null } });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ status: 500, message: 'An error was generated when trying to upload File.', data: { error: error.toString() } });
+    }
+
+}
+
 module.exports = {
-    registerPet
+    registerPet,
+    uploadImagesPet,
 }
