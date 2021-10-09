@@ -4,7 +4,8 @@ const checkEmailDomain = (email) => {
 
 const checkPassword = (str) => {
     //falta la exp reg correcta
-    return (/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/.test(str));
+    let re = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,}$/;
+    return re.test(str)
 }
 
 module.exports = {

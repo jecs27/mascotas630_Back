@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
 
-const passwordEncryption = async(password) => {
+const passwordEncryption = (password) => {
     return bcrypt.hashSync(password, 10);
 }
 
 module.exports = {
-    passwordEncryption
+    passwordEncryption,
+
 }
