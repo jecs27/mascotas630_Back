@@ -2,29 +2,29 @@
 const moment = require("moment");
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class users extends Model {
-        static associate(models) {}
+    class petsImages extends Model {
+        static associate(models) {
+            petsImages.belongsTo(models.pets, {
+                as: 'pets',
+                foreignKey: 'pet_id'
+            });
+        }
     }
-    users.init({
+    petsImages.init({
         create_date: {
             type: DataTypes.DATEONLY,
             allowNull: false,
             defaultValue: moment().format('YYYY-MM-DD'),
         },
-        user_id: {
+        petImage_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrementIdentity: true,
             autoIncrement: true,
             allowNull: false,
         },
-        email: {
-            type: DataTypes.STRING(100),
-            allowNull: false,
-            defaultValue: ''
-        },
-        password: {
-            type: DataTypes.STRING,
+        image: {
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         uuid: {
@@ -32,19 +32,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: DataTypes.UUIDV4,
         },
-        status: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1,
-        },
     }, {
         sequelize,
         timestamps: false,
-        indexes: [
-            { fields: ['user_id'], unique: true }
-        ],
-        modelName: 'users',
+        modelName: 'pets_images',
         freezeTableName: true
     });
-    return users;
+    return petsImages;
 };

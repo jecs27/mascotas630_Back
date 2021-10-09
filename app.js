@@ -28,8 +28,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 let {
-    usersRouter
+    usersRouter,
+    petsRoute,
 } = require("./routes/");
 
 app.use('/users', usersRouter);
+app.use('/pets', petsRoute);
 module.exports = app;

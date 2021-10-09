@@ -2,35 +2,35 @@
 const moment = require("moment");
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class users extends Model {
+    class pets extends Model {
         static associate(models) {}
     }
-    users.init({
+    pets.init({
         create_date: {
             type: DataTypes.DATEONLY,
             allowNull: false,
             defaultValue: moment().format('YYYY-MM-DD'),
         },
-        user_id: {
+        pet_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrementIdentity: true,
             autoIncrement: true,
             allowNull: false,
         },
-        email: {
+        name: {
             type: DataTypes.STRING(100),
             allowNull: false,
             defaultValue: ''
         },
-        password: {
+        breed: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        uuid: {
-            type: DataTypes.UUID,
+        birthday: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
-            defaultValue: DataTypes.UUIDV4,
+            defaultValue: moment().format('YYYY-MM-DD'),
         },
         status: {
             type: DataTypes.INTEGER,
@@ -41,10 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         timestamps: false,
         indexes: [
-            { fields: ['user_id'], unique: true }
+            { fields: ['pet_id'], unique: true }
         ],
-        modelName: 'users',
+        modelName: 'pets',
         freezeTableName: true
     });
-    return users;
+    return pets;
 };

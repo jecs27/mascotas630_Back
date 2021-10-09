@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const { errResponse } = require('../middleware/HandleError/HandleError');
-const { sequelize, Users } = require('../models/database');
+const { sequelize, users } = require('../models/database');
 const bcrypt = require('bcrypt');
 
 const { passwordEncryption } = require('../utils/passwordEncryption');
@@ -31,7 +31,7 @@ const registerUser = async(req, res) => {
             return res.status(400).send({ status: 400, message: "Invalid Password.", data: {} });
         }
         let crypPassword = await passwordEncryption(password);
-        let [regUser, created] = await Users.findOrCreate({
+        let [regUser, created] = await users.findOrCreate({
             where: {
                 email: email
             },
@@ -47,7 +47,6 @@ const registerUser = async(req, res) => {
             delete regUser.dataValues.create_date;
             delete regUser.dataValues.password;
             delete regUser.dataValues.status;
-            delete regUser.dataValues.user_id;
 
             await tran.commit();
             return res.status(201).send({ status: 201, message: "User was created successfully.", data: { user: regUser } });
@@ -78,7 +77,7 @@ const loginUser = async(req, res) => {
     try {
         let { email, password } = req.body;
 
-        let systemUser = await Users.findOne({
+        let systemUser = await users.findOne({
             where: {
                 email: email,
                 status: 1
