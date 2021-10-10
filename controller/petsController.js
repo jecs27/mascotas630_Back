@@ -101,10 +101,22 @@ const listMyPets = async(req, res) => {
         });
     }
     const tran = await sequelize.transaction();
+    let { lastId, limitData,user_id } = req.body;
 
-    //falta agregar filtros de 12 mascotas
     try {
-        let petListData = await pets.findAll({
+        let petListData = await pets.findAndCountAll({
+            where: {
+                status: 1,
+                user_id: user_id,
+                pet_id:{
+                    [Op.gte]:lastId
+                }
+            },
+            order: [
+                ['pet_id', 'ASC']
+            ],
+            limit: limitData,
+            offset: 0,
             raw: true,
             transaction: tran
         });

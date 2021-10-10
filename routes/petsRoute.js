@@ -32,9 +32,9 @@ const upload = multer({
     }
 });
 
-router.post('/registerPet', upload.array('image'), registerPet);
-router.get('/listMyPets', listMyPets);
-router.patch('/updatePet', updatePet);
-router.delete('/deletePet/:id', deletePet)
+router.post('/registerPet', upload.array('image'), verifyToken, registerPet);
+router.get('/listMyPets', verifyToken, listMyPets);
+router.patch('/updatePet', verifyToken, updatePet);
+router.delete('/deletePet/:id', verifyToken, deletePet)
 
 module.exports = router;
