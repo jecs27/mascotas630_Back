@@ -4,7 +4,7 @@ const sharp = require('sharp');
 
 const { errResponse } = require('../middleware/HandleError/HandleError');
 const { sequelize, pets, petsImages } = require('../models/database');
-
+const { Op } = require('sequelize');
 const messageValidation = 'One or more parameter values in the input request are invalid.';
 const MAX_LENGHT_IMG = 10485760; //10MB
 
@@ -101,15 +101,15 @@ const listMyPets = async(req, res) => {
         });
     }
     const tran = await sequelize.transaction();
-    let { lastId, limitData,user_id } = req.body;
+    let { lastId, limitData, user_id } = req.body;
 
     try {
         let petListData = await pets.findAndCountAll({
             where: {
                 status: 1,
                 user_id: user_id,
-                pet_id:{
-                    [Op.gte]:lastId
+                pet_id: {
+                    [Op.gte]: lastId
                 }
             },
             order: [

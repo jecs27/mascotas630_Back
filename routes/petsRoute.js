@@ -5,6 +5,12 @@ const multer = require('multer');
 const path = require('path');
 
 const {
+    checkGetPetListValidator,
+    checkDataPetValidator,
+    checkUpdateDataPetValidator
+} = require('../middleware/validators/petsValidator')
+
+const {
     registerPet,
     listMyPets,
     updatePet,
@@ -32,9 +38,9 @@ const upload = multer({
     }
 });
 
-router.post('/registerPet', upload.array('image'), verifyToken, registerPet);
-router.get('/listMyPets', verifyToken, listMyPets);
-router.patch('/updatePet', verifyToken, updatePet);
+router.post('/registerPet', upload.array('image'), verifyToken, checkDataPetValidator, registerPet);
+router.post('/listMyPets/', verifyToken, checkGetPetListValidator, listMyPets);
+router.patch('/updatePet', verifyToken, checkUpdateDataPetValidator, updatePet);
 router.delete('/deletePet/:id', verifyToken, deletePet)
 
 module.exports = router;
