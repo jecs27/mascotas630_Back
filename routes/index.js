@@ -1,9 +1,8 @@
-var express = require('express');
-var router = express.Router();
+'use strict';
+const usersRouter = require('./usersRoute');
+const petsRoute = require('./petsRoute');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+module.exports = {
+    usersRouter,
+    petsRoute
+};
