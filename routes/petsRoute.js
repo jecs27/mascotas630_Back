@@ -16,7 +16,7 @@ const {
     updatePet,
     deletePet
 } = require('../controller/petsController');
-const { verifyToken } = require('../middleware/Auth/Auth');
+const { verifyToken } = require('../middleware/auth/auth');
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
