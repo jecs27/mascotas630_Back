@@ -121,6 +121,18 @@ const listMyPets = async(req, res) => {
             transaction: tran
         });
 
+        for (let i = 0; petListData.rows.length > i; i++) {
+            let val = petListData.rows[i];
+
+            let petImages = await petsImages.findAll({
+                where: {
+                    pet_id: val.pet_id
+                }
+            });
+            petListData.rows[i].images = petImages;
+
+        }
+
         await tran.commit();
         return res.status(200).send({
             status: 200,
@@ -183,7 +195,6 @@ const updatePet = async(req, res) => {
                 delete regPet[0].dataValues.create_date;
                 delete regPet[0].dataValues.user_id;
                 delete regPet[0].dataValues.status;
-
 
                 await tran.commit();
                 return res.status(200).send({ status: 200, message: "Update success", data: { pet: regPet[0] } });
